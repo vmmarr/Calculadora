@@ -6,13 +6,12 @@
     </head>
     <body>
         <?php
+            require 'auxiliar.php';
+
             const OP = ["+", "-", "*", "/"];
             const PAR = ['op', 'num1', 'num2'];
 
-            function selected($num1, $num2) {
-                return $num1 == $num2 ? "selected" : "";
-            }
-
+            $num1 = $num2 = $op = null;
             $error = [];
 
             // Comprobacion de parametros:
@@ -32,8 +31,6 @@
                 $error[] = "Los parametros recibidos no son los correctos";
             }
 
-            $resultado = '';
-
             if (empty($error)) {
                 // Comprobaciobn de valores:
 
@@ -49,47 +46,35 @@
                     $error[] = "El operador no es valido";
                 }
             }
-        ?>
 
-        <form action="" method="get">
-            <label for="num1">Primer operando</label>
-            <input type="text" id="num1" name="num1" value="<?= $num1 ?>"><br>
+            formulario($num1, $num2, $op, OP);
 
-            <label for="num2">Segundo operando</label>
-            <input type="text" id="num2" name="num2" value="<?= $num2 ?>"><br>
+            if (empty($error)) {
+                $resultado = '';
+                switch ($op) {
+                    case '+':
+                        $resultado = $num1 + $num2;
+                        break;
 
-            <label for="op">Operacion</label>
-            <select name="op">
-                <?php foreach (OP as $o) { ?>
-                    <option value= "<?= $o ?>" <?= selected($o, $op ) ?> > <?= $o ?> </option>
-                <?php } ?>
-            </select><br>
+                    case '-':
+                        $resultado = $num1 - $num2;
+                        break;
 
-            <input type="submit" value="Calcular">
-        </form>
+                    case '*':
+                        $resultado = $num1 * $num2;
+                        break;
 
-
-        <?php
-
-            switch ($op) {
-                case '+':
-                    $resultado = $num1 + $num2;
-                    break;
-
-                case '-':
-                    $resultado = $num1 - $num2;
-                    break;
-
-                case '*':
-                    $resultado = $num1 * $num2;
-                    break;
-
-                case '/':
-                    $resultado = $num1 / $num2;
-                    break;
+                    case '/':
+                        $resultado = $num1 / $num2;
+                        break;
+                } ?>
+                <h3>Resultado: <?= $resultado ?></h3>
+            <?php } else {
+                foreach ($error as $err) { ?>
+                    <h3>Error: <?= $err ?></h3>
+                <?php }
             }
         ?>
 
-        <h3>Resultado: <?= $resultado ?></h3>
     </body>
 </html>
