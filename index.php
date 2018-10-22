@@ -20,7 +20,16 @@
             <input type="text" id="num2" name="num2" value="<?= $num2 ?>"><br>
 
             <label for="op">Operacion</label>
+            <select name="op">
+                <option value="+">+</option>
+                <option value="-">-</option>
+                <option value="*">*</option>
+                <option value="/">/</option>
+            </select><br>
+
+            <!-- <label for="op">Operacion</label>
             <input type="text" id="op" name="op" value="<?= $op ?>"><br>
+            -->
 
             <input type="submit" value="Calcular">
         </form>
@@ -30,36 +39,20 @@
 
             switch ($op) {
                 case '+':
-                    $resultado = suma($num1, $num2);
+                    $resultado = $num1 + $num2;
                     break;
 
                 case '-':
-                    $resultado = resta($num1, $num2);
+                    $resultado = $num1 - $num2;
                     break;
 
                 case '*':
-                    $resultado = multiplicar($num1, $num2);
+                    $resultado = $num1 * $num2;
                     break;
 
                 case '/':
-                    $resultado = dividir($num1, $num2);
+                    $resultado = $num1 / $num2;
                     break;
-            }
-
-            function suma($a, $b) {
-                return $a+$b;
-            }
-
-            function resta($a, $b) {
-                return $a-$b;
-            }
-
-            function multiplicar($a, $b) {
-                return $a*$b;
-            }
-
-            function dividir($a, $b) {
-                return $a/$b;
             }
         ?>
 
