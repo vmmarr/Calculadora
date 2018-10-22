@@ -7,18 +7,48 @@
     <body>
         <?php
             const OP = ["+", "-", "*", "/"];
+            const PAR = ['op', 'num1', 'num2'];
 
             function selected($num1, $num2) {
                 return $num1 == $num2 ? "selected" : "";
             }
 
-            $num1 = isset($_GET['num1']) ? trim($_GET['num1']) : '0';
-            $num2 = isset($_GET['num2']) ? trim($_GET['num2']) : '0';
-            $op = isset($_GET['op']) ? trim($_GET['op']) : '+';
+            $error = [];
 
-            
+            // Comprobacion de parametros:
+
+            $par = array_keys($_GET);
+            sort($par);
+
+            if (empty($_GET)) {
+                $num1 = 0;
+                $num2 = 0;
+                $op = '+';
+            } elseif ($par == PAR) {
+                $num1 = trim($_GET['num1']);
+                $num2 = trim($_GET['num2']);
+                $op = trim($_GET['op']);
+            } else {
+                $error[] = "Los parametros recibidos no son los correctos";
+            }
 
             $resultado = '';
+
+            if (empty($error)) {
+                // Comprobaciobn de valores:
+
+                if (!is_numeric($num1)) {
+                    $error[] = "El primer operando no es un numero";
+                }
+
+                if (!is_numeric($num1)) {
+                    $error[] = "El segundo operando no es un numero";
+                }
+
+                if (!in_array($op, OP)) {
+                    $error[] = "El operador no es valido";
+                }
+            }
         ?>
 
         <form action="" method="get">
@@ -34,10 +64,6 @@
                     <option value= "<?= $o ?>" <?= selected($o, $op ) ?> > <?= $o ?> </option>
                 <?php } ?>
             </select><br>
-
-            <!-- <label for="op">Operacion</label>
-            <input type="text" id="op" name="op" value="<?= $op ?>"><br>
-            -->
 
             <input type="submit" value="Calcular">
         </form>
