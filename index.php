@@ -6,9 +6,18 @@
     </head>
     <body>
         <?php
+            const OP = ["+", "-", "*", "/"];
+
+            function selected($num1, $num2) {
+                return $num1 == $num2 ? "selected" : "";
+            }
+
             $num1 = isset($_GET['num1']) ? trim($_GET['num1']) : '0';
             $num2 = isset($_GET['num2']) ? trim($_GET['num2']) : '0';
             $op = isset($_GET['op']) ? trim($_GET['op']) : '+';
+
+            
+
             $resultado = '';
         ?>
 
@@ -21,10 +30,9 @@
 
             <label for="op">Operacion</label>
             <select name="op">
-                <option value="+">+</option>
-                <option value="-">-</option>
-                <option value="*">*</option>
-                <option value="/">/</option>
+                <?php foreach (OP as $o) { ?>
+                    <option value= "<?= $o ?>" <?= selected($o, $op ) ?> > <?= $o ?> </option>
+                <?php } ?>
             </select><br>
 
             <!-- <label for="op">Operacion</label>
