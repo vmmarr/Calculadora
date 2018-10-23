@@ -6,75 +6,44 @@
     </head>
     <body>
         <?php
-            require 'auxiliar.php';
-
-            const OP = ["+", "-", "*", "/"];
-            const PAR = ['op', 'num1', 'num2'];
-
-            $num1 = $num2 = $op = null;
-            $error = [];
-
-            // Comprobacion de parametros:
-
-            $par = array_keys($_GET);
-            sort($par);
-
-            if (empty($_GET)) {
-                $num1 = 0;
-                $num2 = 0;
-                $op = '+';
-            } elseif ($par == PAR) {
-                $num1 = trim($_GET['num1']);
-                $num2 = trim($_GET['num2']);
-                $op = trim($_GET['op']);
-            } else {
-                $error[] = "Los parametros recibidos no son los correctos";
+        require 'auxiliar.php';
+        const OP = ['+', '-', '*', '/'];
+        const PAR = ['op', 'op1', 'op2'];
+        $op1 = $op2 = $op = null;
+        $error = [];
+        // Comprobación de parámetros:
+        $par = array_keys($_GET);
+        sort($par);
+        if (empty($_GET)) {
+            $op1 = '0';
+            $op2 = '0';
+            $op = '+';
+        } elseif ($par == PAR) {
+            $op1 = trim($_GET['op1']);
+            $op2 = trim($_GET['op2']);
+            $op = trim($_GET['op']);
+        } else {
+            $error[] = "Los parámetros recibidos no son los correctos.";
+        }
+        if (empty($error)) {
+            // Comprobación de valores:
+            if (!is_numeric($op1)) {
+                $error[] = "El primer operando no es un número.";
             }
-
-            if (empty($error)) {
-                // Comprobaciobn de valores:
-
-                if (!is_numeric($num1)) {
-                    $error[] = "El primer operando no es un numero";
-                }
-
-                if (!is_numeric($num1)) {
-                    $error[] = "El segundo operando no es un numero";
-                }
-
-                if (!in_array($op, OP)) {
-                    $error[] = "El operador no es valido";
-                }
+            if (!is_numeric($op2)) {
+                $error[] = "El segundo operando no es un número.";
             }
-
-            formulario($num1, $num2, $op, OP);
-
-            if (empty($error)) {
-                $resultado = '';
-                switch ($op) {
-                    case '+':
-                        $resultado = $num1 + $num2;
-                        break;
-
-                    case '-':
-                        $resultado = $num1 - $num2;
-                        break;
-
-                    case '*':
-                        $resultado = $num1 * $num2;
-                        break;
-
-                    case '/':
-                        $resultado = $num1 / $num2;
-                        break;
-                } ?>
-                <h3>Resultado: <?= $resultado ?></h3>
-            <?php } else {
-                foreach ($error as $err) { ?>
-                    <h3>Error: <?= $err ?></h3>
-                <?php }
+            if (!in_array($op, OP)) {
+                $error[] = "El operador no es válido.";
             }
-        ?>
-
+        }
+        formulario($op1, $op2, $op, OP);
+        if (empty($error)): ?>
+            <h3>Resultado: <?= calcula($op1, $op2, $op) ?></h3>
+        <?php else:
+            foreach ($error as $err): ?>
+                <h3>Error: <?= $err ?></h3>
+            <?php endforeach;
+        endif ?>
     </body>
 </html>
