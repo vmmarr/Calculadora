@@ -1,17 +1,52 @@
 <?php
-function selected($op1, $op2)
-{
-    return $op1 == $op2 ? "selected" : "";
+function comprebaParametros($par, &$error) {
+    if (!empty($_GET)) {
+        if (empty(array_diff_key($_GET, $par)) &&
+            empty(array_diff_key($par, $_GET))) {
+            return array_map('trim', $_GET);
+        } else {
+            $error[] = "Los parámetros recibidos no son los correctos.";
+        }
+    }
+    return $par;
 }
-function formulario($op1, $op2, $op, $ops)
+
+function muestraErrores($error) {
+    foreach ($error as $err) { ?>
+        <h3>Error: <?= $err ?></h3>
+    <?php }
+}
+
+function mostrarResultado($num1, $num2, $op) { ?>
+    <h3>Resultado: <?= calcula($num1, $num2, $op) ?></h3>
+<?php }
+
+function compruebaValores($num1, $num2, $op, $ops, &$error) {
+    if (!is_numeric($num1)) {
+        $error[] = "El primer operando no es un número.";
+    }
+    if (!is_numeric($num2)) {
+        $error[] = "El segundo operando no es un número.";
+    }
+    if (!in_array($op, $ops)) {
+        $error[] = "El operador no es válido.";
+    }
+}
+
+function selected($num1, $num2)
+{
+    return $num1 == $num2 ? "selected" : "";
+}
+
+function formulario($num1, $num2, $op, $ops)
 {
 ?>
     <form action="" method="get">
-        <label for="op1">Primer operando *:</label>
-        <input id="op1" type="text" name="op1" value="<?= $op1 ?>"><br/>
-        <label for="op2">Segundo operando *:</label>
-        <input id="op2" type="text" name="op2" value="<?= $op2 ?>"><br/>
-        <label for="op">Operación *:</label>
+        <label for="num1">Primer operando:</label>
+        <input id="num1" type="text" name="num1" value="<?= $num1 ?>"><br/>
+        <label for="num2">Segundo operando:</label>
+        <input id="num2" type="text" name="num2" value="<?= $num2 ?>"><br/>
+        <label for="op">Operación:</label>
         <select name="op">
             <?php foreach ($ops as $o): ?>
                 <option value="<?= $o ?>" <?= selected($op, $o) ?> >
@@ -23,21 +58,23 @@ function formulario($op1, $op2, $op, $ops)
     </form>
 <?php
 }
-function calcula($op1, $op2, $op)
+
+function calcula($num1, $num2, $op)
 {
     switch ($op) {
         case '+':
-            $res = $op1 + $op2;
+            $res = $num1 + $num2;
             break;
         case '-':
-            $res = $op1 - $op2;
+            $res = $num1 - $num2;
             break;
         case '*':
-            $res = $op1 * $op2;
+            $res = $num1 * $num2;
             break;
         case '/':
-            $res = $op1 / $op2;
+            $res = $num1 / $num2;
             break;
     }
+
     return $res;
 }
